@@ -1,12 +1,11 @@
 package life.inha.icemarket.domain.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
+import net.bytebuddy.asm.Advice;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Entity(name = "users")
@@ -14,14 +13,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NonNull
     private String name;
 
     @NonNull
+    @Email
     private String email;
 
     @NonNull
@@ -29,9 +29,6 @@ public class User {
     private String passwordHashed;
 
     private String nickname;
-
-    @NonNull
-    private String student_id;
 
     @CreatedDate
     @NonNull
@@ -41,6 +38,16 @@ public class User {
 //    @NonNull
 //    private LocalDateTime updatedAt;
 //
-//    @Column(name = "deleted_at")
-//    private LocalDateTime deletedAt;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Builder
+    public User(Integer id, String name, String email, String nickname, String passwordHashed){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.nickname = nickname;
+        this.passwordHashed = passwordHashed;
+        this.createdAt = LocalDateTime.now();
+    }
 }
